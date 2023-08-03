@@ -37,7 +37,9 @@ const SelectModal = (props) => {
                             <View>
                                 <RadioForm>
                                     {props.items.map((obj, i) => (
-                                        <TouchableOpacity>
+                                        <TouchableOpacity
+                                        key={i}
+                                        >
 
                                             <RadioButton key={i}  >
                                                 <RadioButtonLabel

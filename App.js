@@ -1,5 +1,5 @@
 import { registerRootComponent } from 'expo';
-import React, { useMemo, useState } from 'react';
+import React, {  useState } from 'react';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';// import React, { useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from "yup";
@@ -18,7 +18,6 @@ import {
   Pressable
 } from 'react-native';
 import { AntDesign, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import SelectDropdown from 'react-native-select-dropdown';
 import CustomModal from './src/components/CustomModal'
 import SelectModal from './src/components/SelectModal'
 
@@ -204,7 +203,7 @@ function App() {
                       placeholder='Điện thoại'
                       style={styles.input}
                       keyboardType='numeric'
-                      maxLength={10}
+                      maxLength={11}
                       onChangeText={handleChange('sdtNguoiGui')}
                       value={values.sdtNguoiGui} />
                   </View>
@@ -291,7 +290,7 @@ function App() {
                       autoCapitalize='none'
                       style={styles.input}
                       maxLength={40} />
-                  </View>
+                  </View> 
                 </View>
               </View>
 
@@ -347,7 +346,7 @@ function App() {
                       placeholder='Điện thoại'
                       style={styles.input}
                       keyboardType='numeric'
-                      maxLength={10}
+                      maxLength={11}
                       onChangeText={handleChange('sdtNguoiNhan')}
                       value={values.sdtNguoiNhan} />
                   </View>
@@ -458,7 +457,7 @@ function App() {
                     </View>
 
                     <View style={styles.switch_container}>{/*Khung Switch giao 1 phần*/}
-                      <Text>Giao 1 phần</Text>
+                      <Text style={{width:'60%',justifyContent:'flex-start'}}>Giao 1 phần</Text>
                       <Switch
                         onValueChange={(value) => setFieldValue('switchGiao1Phan', value)}
                         value={values.switchGiao1Phan} />
@@ -467,9 +466,7 @@ function App() {
                   {errors.noiDungHangHoa && touched.noiDungHangHoa
                     ? <Text style={styles.text_error}>{errors.noiDungHangHoa}</Text>
                     : null}
-
                   <View style={{ flexDirection: 'row' }}>
-
                     <View
                       style={[
                         styles.input_container,
@@ -504,7 +501,7 @@ function App() {
                     {/* </TouchableWithoutFeedback> */}
 
                     <View style={styles.switch_container}>{/*Khung Switch phí bảo hiểm*/}
-                      <Text>Phí bảo hiểm</Text>
+                      <Text style={{width:'60%',justifyContent:'flex-start'}}>Phí bảo hiểm</Text>
                       <Switch
                         onValueChange={(value) => {
                           setFieldValue('switchPhiBaoHiem', value)
@@ -571,6 +568,7 @@ function App() {
                                       services.map((obj, i) => (
 
                                         <TouchableOpacity
+                                        key={i}
                                           onPress={() => {
                                             setValueOfExpress(i)
                                           }}>
@@ -669,7 +667,7 @@ function App() {
                       <TextInput
                         keyboardType='numeric'
                         style={[styles.input, { width: '50%' }]}
-                        maxLength={5}
+                        maxLength={5} 
                         onChangeText={value => setFieldValue('soKien', value.replace(/[^0-9]/g, ''))}
                         value={values.soKien} />
                       <Text style={{ color: 'gray' }}>Số kiện</Text>
@@ -703,7 +701,6 @@ function App() {
                         }}
                         value={chieuDai} />
                     </View>
-
                     <View style={[styles.input_container, { width: '32%' }]}>{/*Khung input chiều rộng*/}
                       <TextInput
                         placeholder='Rộng (Cm)'
@@ -893,7 +890,6 @@ function App() {
                       onChangeText={handleChange('ghiChu')}
                       value={values.ghiChu} />
                   </View>
-
                   <View style={[styles.text_container, { marginTop: 10, justifyContent: 'space-between' }]}>
                     <Text>Tổng vận phí:</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
