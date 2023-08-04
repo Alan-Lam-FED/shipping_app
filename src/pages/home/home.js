@@ -31,7 +31,7 @@ import {
 } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import CustomModal from "../../components/CustomModal";
-import SelectModal from "../../components/SelectModal";
+import SelectModal from "../../components/selectModal/SelectModal";
 
 export default function Home({ navigation }) {
   const [inputVUN, setInputVUN] = useState(false); // Dùng để Bật/Tắt(True/False) input VUT Số kiện và Chi phí
@@ -45,7 +45,7 @@ export default function Home({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false); // Dùng để Bật/Tắt Modal thông báo
   const [modalMessage, setModalMessage] = useState(""); // Dùng để hiển thị nội dung Modal thông báo
 
-  // Hàm xử lí chụp ảnh màn hình
+  //Check permission camera
   const askForPermission = async () => {
     const permissionResult = await Permissions.askAsync(Permissions.CAMERA);
     if (permissionResult.status !== "granted") {
@@ -55,7 +55,8 @@ export default function Home({ navigation }) {
     return true;
   };
 
-  handleImageCapture = async () => {
+  // Hàm xử lí chụp ảnh màn hình
+  const handleImageCapture = async () => {
     // make sure that we have the permission
     const hasPermission = await askForPermission();
     if (!hasPermission) {
@@ -210,8 +211,7 @@ export default function Home({ navigation }) {
     ghiChu: "",
   };
   //DCTUONG
-  const [isShow, setisShow] = useState(false); // State control show and hide options
-  const [value, setValue] = useState(0); //Index of select
+
   const items = [
     { label: "Hàng hóa", value: 0 },
     { label: "Fresh", value: 1 },
@@ -740,6 +740,7 @@ export default function Home({ navigation }) {
                       />
                       <TouchableWithoutFeedback
                         onPress={() => {
+                          console.log("click giá trị sản phẩm");
                           setModalVisible(true);
                           setModalMessage(
                             "Hãy tích chọn Phí bảo hiểm\ntrước khi nhập Giá trị sản phẩm"
@@ -811,11 +812,9 @@ export default function Home({ navigation }) {
 
                       {/* hàng hóa DCTUONG */}
                       <SelectModal
-                        isShow={isShow}
-                        setisShow={setisShow}
-                        value={value}
-                        setValue={setValue}
+                        titleModal="Loại hàng hóa"
                         items={items}
+                        nameIcon="format-list-numbered"
                       />
                     </View>
                     {/* END DCTUONG */}
@@ -839,7 +838,7 @@ export default function Home({ navigation }) {
                         onChangeText={handleChange('express')}
                         value={values.express} /> */}
                       <View style={styles.wrapIconText}>
-                        <Modal
+                        {/* <Modal
                           animationType="slide"
                           transparent={true}
                           visible={isExpress}
@@ -865,82 +864,12 @@ export default function Home({ navigation }) {
                                     Dịch vụ
                                   </Text>
                                 </View>
-                                <View>
-                                  <RadioForm>
-                                    {services.map((obj, i) => (
-                                      <TouchableOpacity
-                                        onPress={() => {
-                                          setValueOfExpress(i);
-                                        }}
-                                      >
-                                        <RadioButton key={i}>
-                                          <RadioButtonInput
-                                            obj={obj}
-                                            index={i}
-                                            isSelected={valueOfExpress === i}
-                                            onPress={(value) => {
-                                              setValueOfExpress(value);
-                                            }}
-                                            borderWidth={1}
-                                            buttonInnerColor={"#e74c3c"}
-                                            buttonOuterColor={
-                                              valueOfExpress === i
-                                                ? "#2196f3"
-                                                : "#000"
-                                            }
-                                            buttonSize={20}
-                                            buttonOuterSize={30}
-                                            buttonStyle={{}}
-                                            buttonWrapStyle={{
-                                              paddingLeft: 10,
-                                              paddingTop: 5,
-                                            }}
-                                          />
-                                          <View
-                                            style={{
-                                              justifyContent: "center",
-                                              paddingLeft: 10,
-                                            }}
-                                          >
-                                            <RadioButtonLabel
-                                              obj={obj}
-                                              index={i}
-                                              labelHorizontal={true}
-                                              onPress={(value) => {
-                                                setValueOfExpress(value);
-                                              }}
-                                              labelStyle={{
-                                                fontSize: 20,
-                                                color: "black",
-                                                width: 180,
-                                                paddingVertical: 10,
-                                                paddingLeft: 0,
-                                              }}
-                                              labelWrapStyle={{}}
-                                            />
-                                            <Text style={{ color: "#91C8E4" }}>
-                                              (
-                                              <Text style={{ color: "red" }}>
-                                                *
-                                              </Text>
-                                              ){services[i].service}
-                                            </Text>
-                                          </View>
-                                          <View>
-                                            <Text style={{ color: "#FD8D14" }}>
-                                              {services[i].money} VND
-                                            </Text>
-                                          </View>
-                                        </RadioButton>
-                                      </TouchableOpacity>
-                                    ))}
-                                  </RadioForm>
-                                </View>
+                                
                               </View>
                             </View>
                           </TouchableWithoutFeedback>
-                        </Modal>
-                        <Pressable onPress={() => setisExpress(true)}>
+                        </Modal> */}
+                        {/* <Pressable onPress={() => setisExpress(true)}>
                           <View style={{ flexDirection: "row" }}>
                             <MaterialCommunityIcons
                               name="truck-outline"
@@ -952,7 +881,12 @@ export default function Home({ navigation }) {
                               {services[valueOfExpress].label}
                             </Text>
                           </View>
-                        </Pressable>
+                        </Pressable> */}
+                        <SelectModal
+                          items={services}
+                          titleModal="Dịch vụ"
+                          nameIcon="truck-outline"
+                        />
                       </View>
                       {/* // */}
                     </View>
