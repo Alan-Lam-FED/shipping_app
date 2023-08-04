@@ -306,7 +306,7 @@ export default function Home({ navigation }) {
                       placeholder="Điện thoại"
                       style={styles.input}
                       keyboardType="numeric"
-                      maxLength={10}
+                      maxLength={11}
                       onChangeText={handleChange("sdtNguoiGui")}
                       value={values.sdtNguoiGui}
                     />
@@ -704,7 +704,11 @@ export default function Home({ navigation }) {
 
                     <View style={styles.switch_container}>
                       {/*Khung Switch giao 1 phần*/}
-                      <Text>Giao 1 phần</Text>
+                      <Text
+                        style={{ width: "60%", justifyContent: "flex-start" }}
+                      >
+                        Giao 1 phần
+                      </Text>
                       <Switch
                         onValueChange={(value) =>
                           setFieldValue("switchGiao1Phan", value)
@@ -770,7 +774,11 @@ export default function Home({ navigation }) {
 
                     <View style={styles.switch_container}>
                       {/*Khung Switch phí bảo hiểm*/}
-                      <Text>Phí bảo hiểm</Text>
+                      <Text
+                        style={{ width: "60%", justifyContent: "flex-start" }}
+                      >
+                        Phí bảo hiểm
+                      </Text>
                       <Switch
                         onValueChange={(value) => {
                           setFieldValue("switchPhiBaoHiem", value);
