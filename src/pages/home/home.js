@@ -846,50 +846,6 @@ export default function Home({ navigation }) {
                         onChangeText={handleChange('express')}
                         value={values.express} /> */}
                       <View style={styles.wrapIconText}>
-                        {/* <Modal
-                          animationType="slide"
-                          transparent={true}
-                          visible={isExpress}
-                          onRequestClose={() => {
-                            setisExpress(!isExpress);
-                          }}
-                        >
-                          <TouchableWithoutFeedback
-                            onPress={() => setisExpress(false)}
-                          >
-                            <View style={styles.centeredView}>
-                              <View style={styles.modalView}>
-                                <View style={styles.titleModal}>
-                                  <Text
-                                    style={[
-                                      styles.modalText,
-                                      {
-                                        justifyContent: "center",
-                                        width: "100%",
-                                      },
-                                    ]}
-                                  >
-                                    Dịch vụ
-                                  </Text>
-                                </View>
-                                
-                              </View>
-                            </View>
-                          </TouchableWithoutFeedback>
-                        </Modal> */}
-                        {/* <Pressable onPress={() => setisExpress(true)}>
-                          <View style={{ flexDirection: "row" }}>
-                            <MaterialCommunityIcons
-                              name="truck-outline"
-                              size={24}
-                              color="black"
-                              style={styles.icon}
-                            />
-                            <Text style={{ paddingTop: 2 }}>
-                              {services[valueOfExpress].label}
-                            </Text>
-                          </View>
-                        </Pressable> */}
                         <SelectModal
                           items={services}
                           titleModal="Dịch vụ"

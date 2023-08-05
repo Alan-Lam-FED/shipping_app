@@ -60,4 +60,9 @@ export const styles = StyleSheet.create({
     paddingRight: 10,
   },
   rightMoney: { paddingRight: 10, color: "orange" },
+  input: {
+    paddingHorizontal: 5,
+    fontSize: 15,
+    fontWeight:'500'
+  },
 });
