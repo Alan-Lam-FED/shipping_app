@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   items: {
     display: "flex",
     justifyContent: "space-between",
-    marginTop:5
+    marginTop: 5,
   },
   leftWrapItem: {
     paddingVertical: 7,
@@ -63,6 +63,6 @@ export const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 5,
     fontSize: 15,
-    fontWeight:'500'
+    fontWeight: "400",
   },
 });

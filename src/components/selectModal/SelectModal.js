@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Animated,
   Pressable,
+  TextInput,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -26,15 +27,25 @@ const SelectModal = (props) => {
 
   return (
     <>
-      <TouchableOpacity onPress={() => setisShow(true)}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <TouchableOpacity
+        onPress={() => setisShow(true)}
+        style={{
+          width: "100%",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
           <MaterialCommunityIcons
             name={props.nameIcon}
             size={24}
             color="black"
             style={styles.icon}
           />
-          <Text style={styles.input}>{props.items[value].label}</Text>
+          <Text style={styles.input}>{props.items[props.value].label}</Text>
         </View>
       </TouchableOpacity>
       <Modal
@@ -57,7 +68,7 @@ const SelectModal = (props) => {
                     <TouchableOpacity
                       key={i}
                       onPress={() => {
-                        VsetValue(i);
+                        props.selectOption(i);
                       }}
                     >
                       <RadioButton style={styles.items} key={i}>
@@ -67,7 +78,8 @@ const SelectModal = (props) => {
                             index={i}
                             labelHorizontal={true}
                             onPress={(value) => {
-                              VsetValue(value);
+                              // VsetValue(value);
+                              props.selectOption(value);
                             }}
                             labelStyle={styles.leftLabel}
                             labelWrapStyle={styles.leftLabelWrap}
@@ -88,13 +100,13 @@ const SelectModal = (props) => {
                           <RadioButtonInput
                             obj={obj}
                             index={i}
-                            isSelected={value === i}
+                            isSelected={props.value === i}
                             onPress={(value) => {
-                              VsetValue(value);
+                              props.selectOption(value);
                             }}
                             borderWidth={1}
                             buttonInnerColor={"#e74c3c"}
-                            buttonOuterColor={value === i ? "#2196f3" : "#000"}
+                            buttonOuterColor={props.value === i ? "#2196f3" : "#000"}
                             buttonSize={20}
                             buttonOuterSize={30}
                             buttonStyle={{}}

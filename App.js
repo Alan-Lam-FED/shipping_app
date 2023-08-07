@@ -1,7 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import React, { useMemo, useState } from "react";
-import { registerRootComponent } from 'expo';
+import React, { useEffect, useMemo, useState } from "react";
+import { registerRootComponent } from "expo";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import {
@@ -33,6 +33,7 @@ export default function App() {
   const [chieuDai, setChieuDai] = useState("");
   const [chieuRong, setChieuRong] = useState("");
   const [chieuCao, setChieuCao] = useState("");
+  const [soluong, setSoluong] = useState("1");
   const [trongLuongQuyDoi, setTrongLuongQuyDoi] = useState("");
 
   const [modalVisible, setModalVisible] = useState(false); // Dùng để Bật/Tắt Modal thông báo
@@ -81,7 +82,12 @@ export default function App() {
   };
 
   // Hàm tính trọng lương quy đổi tự động
-  const TinhTrongLuongQuyDoi = (chieuDai, chieuRong, chieuCao) => {
+  useEffect(() => {
+    TinhTrongLuongQuyDoi();
+  }, [chieuDai, chieuRong, chieuCao, soluong]);
+
+  const TinhTrongLuongQuyDoi = () => {
+    console.log(chieuRong, chieuCao, chieuDai, soluong);
     // Kiểm tra số có tồn tại && có phải số && và số dương hay không
     const preCheckNumber = (number) =>
       number && !isNaN(parseFloat(number)) && parseFloat(number) >= 0;
@@ -95,9 +101,11 @@ export default function App() {
         (
           (parseFloat(chieuDai) *
             parseFloat(chieuRong) *
+            parseFloat(soluong) *
             parseFloat(chieuCao)) /
           5000
         )
+
           .toFixed(2)
           .toString()
       );
@@ -175,7 +183,7 @@ export default function App() {
     hoTenNguoiGui: "",
     diaChiNguoiGui: "",
     diemDiNguoiGui: "",
-    phuongThucVanChuyen: "",
+    phuongThucThanhToan: 0,
     sdtNguoiNhan: "",
     hoTenNguoiNhan: "",
     diaChiNguoiNhan: "",
@@ -184,8 +192,8 @@ export default function App() {
     giaTriSanPham: "",
     switchGiao1Phan: false,
     switchPhiBaoHiem: false,
-    hangHoa: "",
-    express: "",
+    hangHoa: 0,
+    express: 0,
     trongLuong: "",
     soKien: "1",
     chieuDai: "",
@@ -210,9 +218,12 @@ export default function App() {
     { label: "FRESH", value: 1 },
     { label: "THƯ TỪ", value: 2 },
   ];
+
+  const paymentMethods = [
+    { label: "Người nhận thanh toán", value: 0 },
+    { label: "Người gửi thanh toán", value: 1 },
+  ];
   //EXPRESS
-  const [isExpress, setisExpress] = useState(false); // State control show and hide options
-  const [valueOfExpress, setValueOfExpress] = useState(0); //Index of select
   const services = [
     {
       label: "EXPRESS",
@@ -447,10 +458,13 @@ export default function App() {
                     <Text style={styles.important_text}> *</Text>
                   </View>
                   <View style={styles.input_container}>
-                    <TextInput
-                      autoCapitalize="none"
-                      style={styles.input}
-                      maxLength={40}
+                    <SelectModal
+                      titleModal="Phương thức thanh toán"
+                      items={paymentMethods}
+                      selectOption={(param) =>
+                        setFieldValue("phuongThucThanhToan", param)
+                      }
+                      value={values.phuongThucThanhToan}
                     />
                   </View>
                 </View>
@@ -475,7 +489,6 @@ export default function App() {
                       autoCapitalize="none"
                       style={styles.input}
                       maxLength={40}
-                      value={values.phuongThucVanChuyen}
                     />
                   </View>
                 </View>
@@ -801,21 +814,15 @@ export default function App() {
                         { width: "48%" },
                       ]}
                     >
-                      {/*Khung input HÀNG HÓA*/}
-                      {/* <MaterialCommunityIcons name="truck-outline" size={24} color="black" style={styles.icon} /> */}
-                      {/* <TextInput
-                        placeholder='HÀNG HÓA'
-                        autoCapitalize='none'
-                        style={styles.input}
-                        maxLength={40}
-                        onChangeText={handleChange('hangHoa')}
-                        value={values.hangHoa} /> */}
-
                       {/* hàng hóa DCTUONG */}
                       <SelectModal
                         titleModal="Loại hàng hóa"
                         items={items}
                         nameIcon="format-list-numbered"
+                        selectOption={(param) => {
+                          setFieldValue("hangHoa", param);
+                        }}
+                        value={values.hangHoa}
                       />
                     </View>
                     {/* END DCTUONG */}
@@ -829,22 +836,15 @@ export default function App() {
                         { width: "48%" },
                       ]}
                     >
-                      {/*Khung input EXPRESS*/}
-                      {/* <MaterialCommunityIcons name="truck-outline" size={24} color="black" style={styles.icon} />
-                      <TextInput
-                        placeholder='EXPRESS'
-                        autoCapitalize='none'
-                        style={styles.input}
-                        maxLength={40}
-                        onChangeText={handleChange('express')}
-                        value={values.express} /> */}
-                      <View style={styles.wrapIconText}>
-                        <SelectModal
-                          items={services}
-                          titleModal="Dịch vụ"
-                          nameIcon="truck-outline"
-                        />
-                      </View>
+                      <SelectModal
+                        items={services}
+                        titleModal="Dịch vụ"
+                        nameIcon="truck-outline"
+                        selectOption={(param) => {
+                          setFieldValue("express", param);
+                        }}
+                        value={values.express}
+                      />
                       {/* // */}
                     </View>
                   </View>
@@ -908,9 +908,10 @@ export default function App() {
                         keyboardType="numeric"
                         style={[styles.input, { width: "50%" }]}
                         maxLength={5}
-                        onChangeText={(value) =>
-                          setFieldValue("soKien", value.replace(/[^0-9]/g, ""))
-                        }
+                        onChangeText={(value) => {
+                          setFieldValue("soKien", value.replace(/[^0-9]/g, ""));
+                          setSoluong(value);
+                        }}
                         value={values.soKien}
                       />
                       <Text style={{ color: "gray" }}>Số kiện</Text>
@@ -955,7 +956,6 @@ export default function App() {
                         onChangeText={(value) => {
                           setChieuDai(value);
                           setFieldValue("chieuDai", value);
-                          TinhTrongLuongQuyDoi(value, chieuRong, chieuCao);
                         }}
                         value={chieuDai}
                       />
@@ -971,7 +971,6 @@ export default function App() {
                         onChangeText={(value) => {
                           setChieuRong(value);
                           setFieldValue("chieuRong", value);
-                          TinhTrongLuongQuyDoi(chieuDai, value, chieuCao);
                         }}
                         value={chieuRong}
                       />
@@ -987,7 +986,6 @@ export default function App() {
                         onChangeText={(value) => {
                           setChieuCao(value);
                           setFieldValue("chieuCao", value);
-                          TinhTrongLuongQuyDoi(chieuDai, chieuRong, value);
                         }}
                         value={chieuCao}
                       />
@@ -1255,7 +1253,7 @@ export default function App() {
                       style={{ flexDirection: "row", alignItems: "flex-end" }}
                     >
                       <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                        9,000,000
+                        {services[values.express].money}
                       </Text>
                       <Text
                         style={{ color: "orange", marginLeft: 5, fontSize: 20 }}
@@ -1317,7 +1315,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical:10,
+    paddingVertical: 10,
     backgroundColor: "#f7f7f7",
   },
   icon: {
@@ -1350,6 +1348,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingHorizontal: 5,
+    paddingVertical: 5,
   },
   input_error: {
     borderColor: "red",
@@ -1362,7 +1361,7 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgray",
   },
   important_input: {
-    borderColor: "crimson",
+    // borderColor: "crimson",
     borderWidth: 1,
   },
   important_text: {
