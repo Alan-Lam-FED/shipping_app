@@ -103,7 +103,7 @@ export default function App() {
             parseFloat(chieuRong) *
             parseFloat(soluong) *
             parseFloat(chieuCao)) /
-          5000
+          5000  
         )
 
           .toFixed(2)
@@ -545,7 +545,7 @@ export default function App() {
                   ) : null}
 
                   <View
-                    style={[
+                    style={[ 
                       styles.input_container,
                       errors.hoTenNguoiNhan && touched.hoTenNguoiNhan
                         ? styles.input_error
@@ -1038,7 +1038,7 @@ export default function App() {
                     <View
                       style={[
                         styles.input_container,
-                        { flex: 1, marginHorizontal: 5 },
+                        { flex: 1, marginHorizontal: 5 ,width:"40%"},
                         !inputVUN && styles.disabled_input,
                       ]}
                     >
@@ -1047,7 +1047,9 @@ export default function App() {
                         editable={inputVUN}
                         placeholder="VUN số kiện"
                         keyboardType="numeric"
-                        style={styles.input}
+                        // style={styles.input}
+                        style={[styles.input,{overflow: "hidden"}]}
+
                         maxLength={3}
                         onChangeText={handleChange("vunSoKien")}
                         value={values.vunSoKien}
@@ -1066,7 +1068,7 @@ export default function App() {
                         editable={inputVUN}
                         placeholder="VUN chi phí"
                         keyboardType="numeric"
-                        style={styles.input}
+                        style={[styles.input,{overflow: 'hidden'}]}
                         maxLength={3}
                         onChangeText={handleChange("vunChiPhi")}
                         value={values.vunChiPhi}
