@@ -20,7 +20,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 const SelectModal = (props) => {
   const [isShow, setisShow] = useState(false); // State control show and hide options
   const [value, VsetValue] = useState(0); //Index of select
-  // console.log(props)
   const opacity = useRef(new Animated.Value(0)).current;
 
   const handleClose = () => {};
@@ -106,7 +105,9 @@ const SelectModal = (props) => {
                             }}
                             borderWidth={1}
                             buttonInnerColor={"#e74c3c"}
-                            buttonOuterColor={props.value === i ? "#2196f3" : "#000"}
+                            buttonOuterColor={
+                              props.value === i ? "#2196f3" : "#000"
+                            }
                             buttonSize={20}
                             buttonOuterSize={30}
                             buttonStyle={{}}

@@ -25,6 +25,7 @@ import {
 } from "@expo/vector-icons";
 import CustomModal from "./src/components/CustomModal";
 import SelectModal from "./src/components/selectModal/SelectModal";
+import { Button } from "react-native";
 
 export default function App() {
   const [inputVUN, setInputVUN] = useState(false); // Dùng để Bật/Tắt(True/False) input VUT Số kiện và Chi phí
@@ -39,6 +40,8 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false); // Dùng để Bật/Tắt Modal thông báo
   const [modalMessage, setModalMessage] = useState(""); // Dùng để hiển thị nội dung Modal thông báo
 
+  const [image, setImage] = useState(null);
+
   //Check permission camera
   const askForPermission = async () => {
     const permissionResult = await Permissions.askAsync(Permissions.CAMERA);
@@ -48,7 +51,6 @@ export default function App() {
     }
     return true;
   };
-
   // Hàm xử lí chụp ảnh màn hình
   const handleImageCapture = async () => {
     // make sure that we have the permission
@@ -57,26 +59,26 @@ export default function App() {
       return;
     } else {
       // launch the camera with the following settings
-      let image = await ImagePicker.launchCameraAsync({
+      let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: false,
+        allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
-        base64: true,
       });
       // make sure a image was taken:
-      if (!image.canceled) {
-        fetch("http://192.168.2.111:8080/", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          // send our base64 string as POST request
-          body: JSON.stringify({
-            imgsource: image.base64,
-          }),
-        });
+      if (!result.canceled) {
+        // fetch("http://192.168.2.111:8080/", {
+        //   method: "POST",
+        //   headers: {
+        //     Accept: "application/json",
+        //     "Content-Type": "application/json",
+        //   },
+        //   // send our base64 string as POST request
+        //   body: JSON.stringify({
+        //     imgsource: image.base64,
+        //   }),
+        // });
+        setImage(result.assets[0].uri);
       }
     }
   };
@@ -87,7 +89,6 @@ export default function App() {
   }, [chieuDai, chieuRong, chieuCao, soluong]);
 
   const TinhTrongLuongQuyDoi = () => {
-    console.log(chieuRong, chieuCao, chieuDai, soluong);
     // Kiểm tra số có tồn tại && có phải số && và số dương hay không
     const preCheckNumber = (number) =>
       number && !isNaN(parseFloat(number)) && parseFloat(number) >= 0;
@@ -103,7 +104,7 @@ export default function App() {
             parseFloat(chieuRong) *
             parseFloat(soluong) *
             parseFloat(chieuCao)) /
-          5000  
+          5000
         )
 
           .toFixed(2)
@@ -545,7 +546,7 @@ export default function App() {
                   ) : null}
 
                   <View
-                    style={[ 
+                    style={[
                       styles.input_container,
                       errors.hoTenNguoiNhan && touched.hoTenNguoiNhan
                         ? styles.input_error
@@ -750,7 +751,6 @@ export default function App() {
                       />
                       <TouchableWithoutFeedback
                         onPress={() => {
-                          console.log("click giá trị sản phẩm");
                           setModalVisible(true);
                           setModalMessage(
                             "Hãy tích chọn Phí bảo hiểm\ntrước khi nhập Giá trị sản phẩm"
@@ -1038,7 +1038,7 @@ export default function App() {
                     <View
                       style={[
                         styles.input_container,
-                        { flex: 1, marginHorizontal: 5 ,width:"40%"},
+                        { flex: 1, marginHorizontal: 5, width: "40%" },
                         !inputVUN && styles.disabled_input,
                       ]}
                     >
@@ -1048,8 +1048,7 @@ export default function App() {
                         placeholder="VUN số kiện"
                         keyboardType="numeric"
                         // style={styles.input}
-                        style={[styles.input,{overflow: "hidden"}]}
-
+                        style={[styles.input, { overflow: "hidden" }]}
                         maxLength={3}
                         onChangeText={handleChange("vunSoKien")}
                         value={values.vunSoKien}
@@ -1068,7 +1067,7 @@ export default function App() {
                         editable={inputVUN}
                         placeholder="VUN chi phí"
                         keyboardType="numeric"
-                        style={[styles.input,{overflow: 'hidden'}]}
+                        style={[styles.input, { overflow: "hidden" }]}
                         maxLength={3}
                         onChangeText={handleChange("vunChiPhi")}
                         value={values.vunChiPhi}
@@ -1268,6 +1267,23 @@ export default function App() {
               </View>
 
               <View style={styles.big_container}>
+                {image && (
+                  <View style={styles.imageWrapper}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setImage(null);
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="close-circle"
+                        size={28}
+                        color="black"
+                        style={styles.btnDelete}
+                      />
+                    </TouchableOpacity>
+                    <Image source={{ uri: image }} style={styles.image} />
+                  </View>
+                )}
                 <TouchableOpacity
                   style={[styles.submit_button, { padding: 9, width: "60%" }]}
                   onPress={handleImageCapture}
@@ -1459,6 +1475,20 @@ const styles = StyleSheet.create({
   productTitle: {
     alignItems: "center",
     paddingTop: 2,
+  },
+  imageWrapper: {
+    width: "90%",
+    height: 380,
+  },
+  btnDelete: {
+    height: 27,
+    width: "100%",
+    textAlign: "right",
+  },
+  image: {
+    width: "100%",
+    objectFit: "cover",
+    height: 350,
   },
 });
 
