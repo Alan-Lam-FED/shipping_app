@@ -30,7 +30,7 @@ const CustomModal = (props) => {
             props.setModalVisible(false);
         });
     };
-
+// fds
     return (
         <View>
             <Modal
