@@ -5,7 +5,7 @@ import { View } from "react-native";
 const ParcelWaiting = () => {
   return (
     <View style={styles.container}>
-      <Text>aaaaaaaaaaaaaaaaaag</Text>
+      <Text>test</Text>
     </View>
   );
 };
