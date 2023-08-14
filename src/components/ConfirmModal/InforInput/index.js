@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { styles } from "../styleComfirlmModal.js"
 import { Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
@@ -22,4 +22,4 @@ const InforInput = (prop) => {
 
 
 
-export default InforInput;
+export default memo(InforInput);

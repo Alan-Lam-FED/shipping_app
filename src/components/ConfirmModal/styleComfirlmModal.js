@@ -59,13 +59,13 @@ export const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical:5
+    marginVertical: 5
   },
   lableInput: {
     marginRight: 5,
     width: '26%',
     justifyContent: 'flex-end',
-    textAlign:'right'
+    textAlign: 'right'
   },
   wrapTextInput: {
     borderColor: '#EADBC8',
@@ -79,5 +79,25 @@ export const styles = StyleSheet.create({
     height: 30,
     paddingHorizontal: 10,
     width: '100%'
+  },
+  wrapButtonCamera: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    width: '60%',
+    paddingVertical: 8,
+    marginVertical: 10,
+    justifyContent: 'center',
+    backgroundColor: '#F94C10',
+    borderRadius: 5
+  },
+  cancelImage: {
+    width: '15%',
+    marginHorizontal: 3,
+    paddingVertical: 8,
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+
   }
 });
