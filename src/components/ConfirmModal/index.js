@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { styles } from "./styleComfirlmModal.js"
-import { Modal, Text, Pressable, View, TouchableOpacity ,PermissionsAndroid} from 'react-native';
+import { Modal, Text, Pressable, View, TouchableOpacity } from 'react-native';
 import CheckBox from 'expo-checkbox';
-import { Entypo, AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { Entypo, AntDesign, MaterialIcons, Ionicons, EvilIcons } from '@expo/vector-icons';
 import InforInput from './InforInput'
 import * as ImagePicker from "expo-image-picker";
-import * as Permissions from "expo-permissions";const ConfirmModal = ({ show, handlerShowComfirmModal, ...prop }) => {
+import * as Permissions from "expo-permissions";
+import Sign from './Sign/index.js';
+
+
+const ConfirmModal = ({ show, handlerShowComfirmModal, ...prop }) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
+  const [showSign, isShowSign] = useState(false) // Hiển thị phần ký tên
+  const [signature, setSign] = useState(null); // lưu trữ ký tên
+  const [image, setImage] = useState(null); // camera chụp ảnh
+
   const handleTextPress = () => {
     setToggleCheckBox(!toggleCheckBox);
   };
 
-  const [image, setImage] = useState(null);
-   //Check permission camera
-   const askForPermission = async () => {
+  //Check permission camera
+  const askForPermission = async () => {
     const permissionResult = await Permissions.askAsync(Permissions.CAMERA);
     if (permissionResult.status !== "granted") {
       Alert.alert("no permissions to access camera!", [{ text: "ok" }]);
@@ -37,39 +44,33 @@ import * as Permissions from "expo-permissions";const ConfirmModal = ({ show, ha
       });
       // make sure a image was taken:
       if (!result.canceled) {
-        // fetch("http://192.168.2.111:8080/", {
-        //   method: "POST",
-        //   headers: {
-        //     Accept: "application/json",
-        //     "Content-Type": "application/json",
-        //   },
-        //   // send our base64 string as POST request
-        //   body: JSON.stringify({
-        //     imgsource: image.base64,
-        //   }),
-        // });
         setImage(result.assets[0].uri);
       }
     }
   };
 
-  // let options = {
-  //   saveToPhotos :true,
-  //   mediaType:'photo'
-  // }
-  // const openCamera = async ()=>{
-  //   const granted = await PermissionsAndroid.request(
-  //     PermissionsAndroid.PERMISSIONS.CAMERA
-  //   )
-  //   if(granted === PermissionsAndroid.RESULTS.GRANTED){
-  //     const result =await launchCamera({
-  //       saveToPhotos :true,
-  //       mediaType:'photo'
-  //     })
-  //     setImage(result.assets[0].uri)
-  //   }
-  // }
-  
+
+  const handlerIsShow = () => {
+    isShowSign(!showSign)
+  }
+  const handlerSign = (data) => {
+    setSign(!data)
+  }
+
+
+  const dataInput = [{
+    lable: 'COD',
+    placeholderInput: 'Enter COD'
+  }, {
+    lable: 'TAX',
+    placeholderInput: 'Enter TAX'
+  }, {
+    lable: 'Tổng cộng',
+    placeholderInput: ''
+  }, {
+    lable: 'Người ký nhận',
+    placeholderInput: ''
+  },]
   return (
     <>
       <View style={styles.centeredView}>
@@ -80,7 +81,10 @@ import * as Permissions from "expo-permissions";const ConfirmModal = ({ show, ha
           onRequestClose={() => {
             handlerShowComfirmModal(!show);
           }}>
-          <View style={styles.centeredView}>
+          {showSign ? <Sign
+            handlerIsShow={handlerIsShow}
+            handlerSign={handlerSign}
+          /> : <View style={styles.centeredView}>
             <View style={styles.modalView}>
               {/* //title */}
               <View style={styles.wrapTitle}>
@@ -102,44 +106,62 @@ import * as Permissions from "expo-permissions";const ConfirmModal = ({ show, ha
                   </View>
                 </View>
               </View>
-              {/* //end title */}
               {/* COD,TAX,total,ngưởi nhận Ký */}
-              <InforInput
-                lable={'COD'}
-                placeholderInput='Enter COD'
-              />
-              <InforInput
-                lable={'TAX'}
-                placeholderInput='Enter TAX'
-              />
-              <InforInput
-                lable={'Tổng cộng'}
-              />
-              <InforInput
-                lable={'Người ký nhận'}
-              />
-              <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+              {dataInput.map((data, index) => {
+                return <InforInput
+                  key={index}
+                  lable={data.lable}
+                  placeholderInput={data.placeholderInput}
+                />
+              })}
+              <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', height: 45 }}>
                 <View style={styles.cancelImage}>
-                  <MaterialIcons name="cancel" size={30} color="black" />
+                  {image !== null ? <MaterialIcons name="cancel" size={30} color="black"
+                    onPress={() => setImage(null)} /> : <Text></Text>}
                 </View>
                 <TouchableOpacity style={styles.wrapButtonCamera}
-                onPress={openCamera}>
+                  onPress={openCamera}>
                   <AntDesign name="camera" size={24} color="white" />
-                  <Text style={{ color: 'white', fontWeight: '600', marginLeft: 10 }}>
+                  <Text style={{ color: 'white', fontWeight: '600', marginLeft: 10, width: '40%' }}>
                     Chụp Hình
                   </Text>
                 </TouchableOpacity>
                 <View style={styles.cancelImage}>
-                  <Ionicons name="md-checkmark-done-circle-outline" size={30 } color="#F94C10" />
+                  <Ionicons name="md-checkmark-done-circle-outline" size={30} color={image !== null ? '#F94C10' : 'black'} />
                 </View>
               </View>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => handlerShowComfirmModal(!show)}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
+              {/* sign (ký tên) */}
+              <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', height: 45 }}>
+                <View style={styles.cancelImage}>
+                  {signature !== null ? <MaterialIcons name="cancel" size={30} color="black"
+                    onPress={() => setImage(null)} /> : <Text></Text>}
+                </View>
+                <TouchableOpacity style={styles.wrapButtonCamera}
+                  onPress={handlerIsShow}
+                >
+                  <EvilIcons name="pencil" size={30} color="white" />
+                  <Text style={{ color: 'white', fontWeight: '600', marginLeft: 10, width: '40%' }}>
+                    Ký Tên
+                  </Text>
+                </TouchableOpacity>
+                <View style={styles.cancelImage}>
+                  <Ionicons name="md-checkmark-done-circle-outline" size={30} color={signature !== null ? '#F94C10' : 'black'} />
+                </View>
+              </View>
+              <View style={{flexDirection:'row',marginTop:10}}>
+                <TouchableOpacity
+                  style={[styles.button,{marginHorizontal:5}]}
+                  onPress={() => handlerShowComfirmModal(!show)}>
+                  <Text style={styles.textStyle}>Hủy</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, { borderWidth: 1, borderColor: '#F94C10',marginHorizontal:5 }]}
+                  onPress={() => handlerShowComfirmModal(!show)}>
+                  <Text style={[styles.textStyle, { color: '#F94C10' }]}>Xác nhận</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </View>}
         </Modal>
 
       </View>

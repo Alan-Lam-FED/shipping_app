@@ -9,18 +9,20 @@ const ParcelWaiting = () => {
     const handlerShowComfirmModal = (show) => {
         setShowComfirmModal(show)
     }
-    return (
+    return (<>
+
         <TouchableOpacity
             onPress={() => setShowComfirmModal(true)}
         >
             <ConfirmModal
                 show={showComfirmModal}
-                handlerShowComfirmModal={handlerShowComfirmModal} 
+                handlerShowComfirmModal={handlerShowComfirmModal}
                 code={'01644484'}
-                />
+            />
             <Text style={styles.container}
             >Button</Text>
         </TouchableOpacity>
+    </>
     );
 }
 

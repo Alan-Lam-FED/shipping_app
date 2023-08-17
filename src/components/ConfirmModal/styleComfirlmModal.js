@@ -24,16 +24,16 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    borderWidth:1,
+    width:100
   },
 
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: 'white',
   },
   textStyle: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     height: 30
   },
   textInput: {
-    height: 30,
+    height: 25,
     paddingHorizontal: 10,
     width: '100%'
   },
@@ -84,9 +84,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'black',
-    width: '60%',
+    width: '70%',
     paddingVertical: 8,
-    marginVertical: 10,
+    // marginVertical: 10,
     justifyContent: 'center',
     backgroundColor: '#F94C10',
     borderRadius: 5
@@ -94,8 +94,8 @@ export const styles = StyleSheet.create({
   cancelImage: {
     width: '15%',
     marginHorizontal: 3,
-    paddingVertical: 8,
-    marginVertical: 10,
+    // paddingVertical: 8,
+    // marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
 
