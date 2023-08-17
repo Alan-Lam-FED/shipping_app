@@ -24,7 +24,7 @@ import {
 } from "@expo/vector-icons";
 
 import {styles} from './stylesOrderCreation'
-import CustomModal from "../../components/CustomModal";
+import CustomModal from "../../components/warningModal/WarningModal";
 import SelectModal from "../../components/selectModal/SelectModal";
 
 export default function OrderCreation() {

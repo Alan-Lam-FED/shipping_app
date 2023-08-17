@@ -27,3 +27,4 @@ const ParcelWaiting = () => {
 }
 
 export default ParcelWaiting;
+
